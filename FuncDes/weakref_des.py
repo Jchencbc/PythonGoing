@@ -18,7 +18,7 @@ class Cacher:
             if data:
                 return data
             data = Data(key)
-            self.pool[key] =data  # 弱引用改造
+            self.pool[key] = data  # 弱引用改造
             return data
 
 class CacherTwo:

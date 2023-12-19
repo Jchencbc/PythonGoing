@@ -84,3 +84,13 @@ class ArithmeticProgression:
             yield result
             index += 1
             result = self.begin + self.step*index  # 等差数列
+            
+def arithmetic_gen(begin, step, end=None):
+    result = type(begin + step)(begin)
+    index = 0
+    forever = end is None
+    while forever or index < end:
+        yield result
+        index +=1
+        result =  begin + step * index
+        

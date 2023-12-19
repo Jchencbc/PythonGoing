@@ -1,5 +1,17 @@
 """
+python的上下文管理器
+是为了简化：
+try:
+    ...
+except:
+    ...
+else:
+    ...
+代码块的
 
+__enter__和 __exit__方法实现 with语句
+
+@contextlib.contextmanager 装饰器和yield生成器实现（简单实现）
 """
 import contextlib
 
@@ -34,5 +46,11 @@ def looking_glass():
     def reverse_write(text):
         original_write(text[::-1])
     sys.stdout.write = reverse_write
-    yield 'JABBERWOCKY'
-    sys.stdout.write = original_write
+    try:
+        yield 'JABBERWOCKY'
+    except ZeroDivisionError:
+        msg = 'Please DO NOT divide by zero!'
+    finally:
+        sys.stdout.write = original_write
+        if msg:
+            print(msg)

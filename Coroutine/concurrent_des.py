@@ -1,5 +1,5 @@
 """
-介绍 concurrent.futures 模块
+介绍 concurrent.futures 模块  处理并发任务。（核心：异步）
 主要实现了进程池和线程池，适合做派生一堆任务，异步执行完成后，再收集这些任务，且保持相同的api
 """
 
@@ -33,3 +33,37 @@ if __name__ == '__main__':
     print("----print result----")
     for r in res:
         print(r)
+        
+"""
+Future:将函数封装为异步执行，可以理解为还未完成的任务，future封装了待完成的任务，实现了主进程和子进程之前的通信，比如查询完成状态，得到结果
+方法
+cancel()：尝试取消调用。 如果调用正在执行或已结束运行不能被取消则该方法将返回 False，否则调用会被取消并且该方法将返回 True。
+cancelled()：如果调用成功取消返回 True。
+running()：如果调用正在执行而且不能被取消那么返回 True 。
+done()：如果调用已被取消或正常结束那么返回 True。常用
+result(timeout=None)
+exception(timeout=None)
+add_done_callback(fn)
+"""
+from concurrent.futures import ThreadPoolExecutor
+import requests
+
+def get_context(url):
+    res = requests.get(url).text
+    return {'url': url, 'res': res}
+
+def parse_context(future):
+    # 参数就是get_context结果的future对象，必须要拿到结果
+    result = future.result()
+    with open('a.txt', 'a', encoding='utf-8') as f:
+        f.write('%s-%s\n' % (result['url'], len(result['res'])))
+
+
+if __name__ == '__main__':
+    urls = [
+        'http://www.openstack.org',
+        'https://www.python.org',
+    ]
+    t = ThreadPoolExecutor()
+    for url in urls:
+        t.submit(get_context, url).add_done_callback(parse_context) # 在执行完get_context后执行parse_context，实现同步

@@ -27,10 +27,12 @@ class Singleton(type):
         else:
             return self.__instance
 
+
 # Example
 class Spam(metaclass=Singleton):
     def __init__(self):
         print('Creating Spam')
+
 
 if __name__ == "__main__":
     # As an instance method

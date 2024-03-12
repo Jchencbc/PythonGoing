@@ -9,6 +9,8 @@ date:12/3/2024 下午 2:07
 """
 链表
 """
+
+
 class Node:
     def __init__(self, value=None, next=None):
         self._value = value  # 数据
@@ -29,7 +31,7 @@ class Node:
 
 class LinkedList:
     def __init__(self):
-        self._head = Node()
+        self._head = None  # 初始化
         self._tail = None
         # self._length = 0
 
@@ -58,19 +60,53 @@ class LinkedList:
 
     def search(self, value):
         """查找元素"""
-        ...
+        current = self._head
+        while current is not None:
+            if current.getValue() == value:
+                return True
+            current = current.getNext()
+        return False
 
     def index(self, value):
         """查找元素返回下标"""
-        ...
+        current = self._head
+        if not self.search(value):
+            return 'Error'
+        index = 1
+        while current is not None:
+            if current.getValue() == value:
+                return index
+            index += 1
+            current = current.getNext()
 
-    def remove(self, value, index):
+    def remove(self, value):
         """删除元素"""
         ...
 
+    def __len__(self):
+        i = 0
+        current = self._head
+        while current is not None:  # 非空
+            i += 1
+            current = current.getNext()
+        return i
+
     def insert(self, value, index):
         """插入元素"""
-        ...
+        i = 1
+        current = self._head
+        if index < 1 or index > len(self) + 1:
+            return 'Error'  # 超出链表插入位置
+        if index == 1:
+            node = Node(value, current)
+            self._head = node
+            return 'ok'
+        while i < index - 1:  # 插入位置前的元素
+            current = current.getNext()
+            i += 1
+        node = Node(value, current.getNext())
+        current.setNext(node)
+        return 'ok'
 
 
 if __name__ == "__main__":

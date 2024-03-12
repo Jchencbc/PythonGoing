@@ -20,19 +20,19 @@ from DataStuctur.class_python_obj import Vector
 class Vector3(Vector):
     def __abs__(self):
         return math.sqrt(sum(x * x for x in self))
-    
+
     def __neg__(self):
         return Vector3(-x for x in self)
-    
+
     def __pos__(self):
         return Vector3(self)
-    
+
     def __add__(self, other):
         try:
             pairs = itertools.zip_longest(self, other, fillvalue=0.0)
             return Vector(a + b for a, b in pairs)
         except TypeError:
             return NotImplemented
-    
+
     def __radd__(self, other):  # 右向加法
         return self + other

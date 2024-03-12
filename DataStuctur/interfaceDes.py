@@ -6,9 +6,11 @@ from collections import abc
 import random
 from typing import Any
 
+
 class Stuggel:
     def __len__(self):
         return 3
+
 
 a = Stuggel()
 
@@ -16,34 +18,36 @@ print(isinstance(a, abc.Sized))  # 无需注册 只要实现了__len__方法 abc
 
 import abc
 
+
 class School(abc.ABC):
-    
+
     @abc.abstractmethod
     def load(self, iterable):
         """从可迭代对象中添加学生"""
-    
+
     @abc.abstractmethod
     def pick(self):
         """删除一位学生返回"""
-    
+
     def getData(self):
         """返回当前学生信息"""
         items = []
         while True:
             try:
-                items.append(self.pick()) 
+                items.append(self.pick())
             except LookupError:  # 抛出异常
                 break
         self.load(items)
         return tuple(items)
 
+
 class MiddleSchool(School):
-    
+
     def __init__(self, students) -> None:
         self._randomizer = random.SystemRandom()
         self._items = []
         self.load(students)
-    
+
     def load(self, items):
         self._items.extend(items)
         self._randomizer.shuffle(self._items)
@@ -53,11 +57,9 @@ class MiddleSchool(School):
             return self._items.pop()
         except IndexError:
             raise LookupError('pick from empty BingoCage')
-    
+
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         return self.pick()
-
-
 
 
 """
@@ -67,11 +69,14 @@ class MiddleSchool(School):
 当一个类继承自抽象基类时，该类必须完成抽象基类定义的语义；当一个类注册为虚拟子类时，这种限制则不再有约束力，可以由程序开发人员自己约束自己，因此提供了更好的灵活性与扩展性
 """
 
+
 @School.register  # 注册
 class Kindergarden():
-     def __init__(self,students):self.students=list(students)
-     def showNumber(self):return len(self.students)
+    def __init__(self, students): self.students = list(students)
 
-boshiwa=Kindergarden(['aa','bb'])
-issubclass(Kindergarden,School)
-isinstance(boshiwa,School)
+    def showNumber(self): return len(self.students)
+
+
+boshiwa = Kindergarden(['aa', 'bb'])
+issubclass(Kindergarden, School)
+isinstance(boshiwa, School)

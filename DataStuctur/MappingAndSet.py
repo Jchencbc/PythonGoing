@@ -48,6 +48,7 @@ if __name__ == "__main__":
     b['Jin'].append('20000')
     print(b)
 
+
     # 自定义字典，UserDict.重写__missing__方法、get方法、__contains__方法
     class MyDict(collections.UserDict):
         def __missing__(self, key):
